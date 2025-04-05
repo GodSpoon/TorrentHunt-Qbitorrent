@@ -12,4 +12,7 @@ COPY uv.lock .
 
 RUN uv sync --frozen --all-groups
 
+# Create a data directory for persistent storage
+RUN mkdir -p /opt/torrenthunt/data
+
 CMD ["uv", "run", "app/torrenthunt.py"]

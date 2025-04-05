@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  torrenthunt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: torrenthunt-qbittorrent
+    restart: unless-stopped
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - API_ID=${API_ID}
+      - API_HASH=${API_HASH}
+      - BOT_NAME=${BOT_NAME:-TorrentHunt with qBittorrent}
+      - BOT_ADMINS=${BOT_ADMINS}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///torrenthunt.db}
+      - TORRENTHUNT_API_URL=${TORRENTHUNT_API_URL:-https://torrenthunt.p.rapidapi.com}
+      - TORRENTHUNT_API_KEY=${TORRENTHUNT_API_KEY}
+      - QBITTORRENT_HOST=${QBITTORRENT_HOST}
+      - QBITTORRENT_USERNAME=${QBITTORRENT_USERNAME:-admin}
+      - QBITTORRENT_PASSWORD=${QBITTORRENT_PASSWORD:-adminadmin}
+      - SENTRY_DSN=${SENTRY_DSN}
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+    volumes:
+      - ./data:/opt/torrenthunt/data

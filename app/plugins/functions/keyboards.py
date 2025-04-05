@@ -65,7 +65,6 @@ class KeyBoard:
                     ),
                 ]
             ]
-
         else:
             results = [
                 [
@@ -75,6 +74,16 @@ class KeyBoard:
                     ),
                 ]
             ]
+
+        # Add download button
+        results.append(
+            [
+                types.InlineKeyboardButton(
+                    text="⬇️ Download to qBittorrent",
+                    callback_data=f"downloadTorrent_{hash}",
+                ),
+            ],
+        )
 
         results.append(
             [

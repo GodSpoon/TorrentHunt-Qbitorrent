@@ -22,6 +22,19 @@ from plugins.functions.misc import Misc
 from py1337x import AsyncPy1337x
 from pyrogram import Client, filters
 
+# Import qBittorrent API if environment variables are set
+qbittorrent_enabled = all([
+    environ.get("QBITTORRENT_HOST"),
+    environ.get("QBITTORRENT_USERNAME"),
+    environ.get("QBITTORRENT_PASSWORD")
+])
+
+if qbittorrent_enabled:
+    from apis.qbittorrent import QBittorrent
+    logger.info("qBittorrent support enabled")
+else:
+    logger.warning("qBittorrent support disabled - missing environment variables")
+
 # Initializing sentry for error tracking
 sentry_sdk.init(
     dsn=environ.get("SENTRY_DSN"),
@@ -68,6 +81,16 @@ Client.struct = Schema(bot)
 filters.custom = Filter(bot)
 Client.explicit_detector = ExplicitDetector()
 
+# Initialize qBittorrent client if enabled
+if qbittorrent_enabled:
+    try:
+        Client.qbittorrent = QBittorrent()
+        logger.info("qBittorrent client initialized")
+    except Exception as e:
+        logger.error(f"Failed to initialize qBittorrent client: {e}")
+        Client.qbittorrent = None
+else:
+    Client.qbittorrent = None
     
 async def main():
     async with bot:
